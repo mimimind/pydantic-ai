@@ -219,9 +219,9 @@ from pydantic_ai_harness import YouSearch
 agent = Agent(
     'anthropic:claude-sonnet-4-6',
     capabilities=[
-        YouSearch(),  # web_search, get_page
+        YouSearch(id='you_open_web'),  # web_search, get_page
         PrefixTools(
-            wrapped=YouSearch(include_domains=['sec.gov'], guidance=''),
+            wrapped=YouSearch(id='you_sec_filings', include_domains=['sec.gov'], guidance=''),
             prefix='sec',
         ),  # sec_web_search, sec_get_page
     ],
@@ -230,7 +230,9 @@ agent = Agent(
 
 Set `guidance=''` on the wrapped instance (or replace it with text that tells
 the model when to use the prefixed tools), since each instance otherwise
-contributes the same default research guidance.
+contributes the same default research guidance. When using durable execution,
+give each configured `YouSearch` or `YouResearch` instance a distinct `id`;
+prefixing tool names does not change their durable toolset identities.
 
 ## Custom client
 

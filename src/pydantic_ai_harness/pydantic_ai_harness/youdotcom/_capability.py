@@ -50,6 +50,9 @@ class YouSearch(AbstractCapability[AgentDepsT]):
 
     _: KW_ONLY
 
+    id: str | None = 'you_search'
+    """Stable capability and toolset identity. Set a distinct ID on each instance when composing several."""
+
     num_results: int = 10
     """Number of results `web_search` returns per query (1 to 20)."""
 
@@ -125,7 +128,7 @@ class YouSearch(AbstractCapability[AgentDepsT]):
     def get_toolset(self) -> YouSearchToolset[AgentDepsT]:
         """Build the toolset providing `web_search` and `get_page`."""
         return YouSearchToolset[AgentDepsT](
-            id='you_search' if self.id is None else self.id,
+            id=self.id,
             client=self.client,
             num_results=self.num_results,
             extraction_mode=self.extraction_mode,

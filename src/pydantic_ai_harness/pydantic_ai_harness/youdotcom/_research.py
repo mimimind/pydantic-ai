@@ -227,6 +227,9 @@ class YouResearch(AbstractCapability[AgentDepsT]):
 
     _: KW_ONLY
 
+    id: str | None = 'you_research'
+    """Stable capability and toolset identity. Set a distinct ID on each instance when composing several."""
+
     research_effort: ResearchEffortName = 'standard'
     """How hard `research` works: `lite`, `standard`, `deep`, or `exhaustive`.
 
@@ -292,7 +295,7 @@ class YouResearch(AbstractCapability[AgentDepsT]):
     def get_toolset(self) -> YouResearchToolset[AgentDepsT]:
         """Build the toolset providing `answer`, `research`, and `finance_research`."""
         return YouResearchToolset[AgentDepsT](
-            id='you_research' if self.id is None else self.id,
+            id=self.id,
             client=self.client,
             research_effort=self.research_effort,
             finance_effort=self.finance_effort,

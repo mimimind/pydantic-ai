@@ -113,6 +113,9 @@ class ExaSearch(AbstractCapability[AgentDepsT]):
     key explicitly, point at a different base URL, or substitute a fake in tests.
     """
 
+    id: str | None = field(default='exa_search', kw_only=True)
+    """Stable capability and toolset identity. Set a distinct ID on each instance when composing several."""
+
     def __post_init__(self) -> None:
         """Validate configuration against the Exa API's documented bounds."""
         if not 1 <= self.num_results <= EXA_MAX_NUM_RESULTS:
@@ -141,7 +144,7 @@ class ExaSearch(AbstractCapability[AgentDepsT]):
     def get_toolset(self) -> ExaSearchToolset[AgentDepsT]:
         """Build the toolset providing `web_search`, `get_page`, and the optional `deep_search` tool."""
         return ExaSearchToolset[AgentDepsT](
-            id='exa_search' if self.id is None else self.id,
+            id=self.id,
             client=self.client,
             num_results=self.num_results,
             max_text_chars=self.max_text_chars,
